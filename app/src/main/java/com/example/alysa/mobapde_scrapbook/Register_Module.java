@@ -59,7 +59,7 @@ public class Register_Module extends AppCompatActivity {
                 String pword = rPassword_Input.getText().toString().trim();
 
                 if (!fname.isEmpty() && !lname.isEmpty() && !uname.isEmpty()) {
-                    registerUser(name, email, password);
+                    // registerUser(name, email, password);
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Please enter your details!", Toast.LENGTH_LONG)
