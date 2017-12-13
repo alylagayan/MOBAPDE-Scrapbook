@@ -15,21 +15,45 @@ import java.util.HashMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private SQLiteDatabase db;
-
-    private static final String TAG = DatabaseHelper.class.getSimpleName();
-
     public static final String DB_NAME = "mobapde_db";
 
+    // Table `users`
+    /*  id INT AUTO_INCREMENT NOT NULL,
+        user_name VARCHAR(30) NOT NULL,
+        first_name VARCHAR(30) NOT NULL,
+        last_name VARCHAR(30) NOT NULL,
+        pass_code VARCHAR(30) NOT NULL,
+
+        PRIMARY KEY (id)
+    * */
     public static final String ACCT_TABLE_NAME = "users";
-    public static final String ACCT_COLUMN_USERID = "id";
-    public static final String ACCT_COLUMN_FIRST_NAME = "first_name";
-    public static final String ACCT_COLUMN_LAST_NAME = "last_name";
-    public static final String ACCT_COLUMN_USERNAME = "user_name";
-    public static final String ACCT_COLUMN_PASSWORD = "pass_code";
-    public static final String ACCT_COLUMN_STATUS = "status";
+    public static final String ACCT_COL_USERID = "id";
+    public static final String ACCT_COL_FIRST_NAME = "first_name";
+    public static final String ACCT_COL_LAST_NAME = "last_name";
+    public static final String ACCT_COL_USERNAME = "user_name";
+    public static final String ACCT_COL_PASSWORD = "pass_code";
+    public static final String ACCT_COL_STATUS = "status";
 
 
+    //Table `photo`
+    /*  photo_id INT NOT NULL,
+        user_id  INT NOT NULL,
+        url TEXT NOT NULL,
+        caption TEXT NOT NULL,
+        date_of_upload DATETIME NOT NULL,
+
+        PRIMARY KEY (photo_id),
+        CONSTRAINT user_id
+            FOREIGN KEY (user_id)
+            REFERENCES mobapde_db.users (id)
+    * */
+    public static final String PHOTO_TABLE_NAME = "photo";
+    public static final String PHOTO_COL_P_ID = "photo_id";
+    public static final String PHOTO_COL_U_ID = "user_id";
+    public static final String PHOTO_COL_DATA = "url";
+    public static final String PHOTO_COL_TEXT = "caption";
+    public static final String PHOTO_COL_DATE = "date_of_upload";
+    public static final String PHOTO_COL_STATUS = "status";
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, 3);
@@ -37,16 +61,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTable = "CREATE TABLE " + ACCT_TABLE_NAME + "("
-                + ACCT_COLUMN_USERID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ACCT_COLUMN_FIRST_NAME + " TEXT, "
-                + ACCT_COLUMN_LAST_NAME + " TEXT, "
-                + ACCT_COLUMN_USERNAME + " TEXT,"
-                + ACCT_COLUMN_PASSWORD + " TEXT,"
-                + ACCT_COLUMN_STATUS + " TINYINT"
-                +");";
+        String createAccount = "CREATE TABLE " + ACCT_TABLE_NAME + "("
+                                + ACCT_COL_USERID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                                + ACCT_COL_FIRST_NAME + " TEXT, "
+                                + ACCT_COL_LAST_NAME + " TEXT, "
+                                + ACCT_COL_USERNAME + " TEXT,"
+                                + ACCT_COL_PASSWORD + " TEXT,"
+                                + ACCT_COL_STATUS + " TINYINT"
+                                +");";
+        String createPhoto = "CREATE TABLE "+ PHOTO_TABLE_NAME +"("
+                             + PHOTO_COL_P_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+                             + PHOTO_COL_U_ID +" INTEGER, "
+                             + PHOTO_COL_DATA +" TEXT, "
+                             + PHOTO_COL_DATE +" TEXT, "
+                             + PHOTO_COL_STATUS +"  TINYINT"
+                             +"FOREIGN KEY(" + PHOTO_COL_U_ID + ") REFERENCES "+ ACCT_TABLE_NAME + "(id) " +");";
 
-        sqLiteDatabase.execSQL(createTable);
+        sqLiteDatabase.execSQL(createAccount);
+        sqLiteDatabase.execSQL(createPhoto);
     }
 
     @Override
@@ -60,10 +92,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content_val= new ContentValues();
 
-        content_val.put(ACCT_COLUMN_FIRST_NAME , f);
-        content_val.put(ACCT_COLUMN_LAST_NAME, l);
-        content_val.put(ACCT_COLUMN_USERNAME, u);
-        content_val.put(ACCT_COLUMN_PASSWORD, p);
+        content_val.put(ACCT_COL_FIRST_NAME , f);
+        content_val.put(ACCT_COL_LAST_NAME, l);
+        content_val.put(ACCT_COL_USERNAME, u);
+        content_val.put(ACCT_COL_PASSWORD, p);
 
         long result = db.insert(ACCT_TABLE_NAME, null, content_val);
 
@@ -84,11 +116,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content_val = new ContentValues();
 
-        content_val.put(ACCT_COLUMN_FIRST_NAME , f);
-        content_val.put(ACCT_COLUMN_LAST_NAME, l);
-        content_val.put(ACCT_COLUMN_USERNAME, u);
-        content_val.put(ACCT_COLUMN_PASSWORD, p);
-        content_val.put(ACCT_COLUMN_STATUS, status);
+        content_val.put(ACCT_COL_FIRST_NAME , f);
+        content_val.put(ACCT_COL_LAST_NAME, l);
+        content_val.put(ACCT_COL_USERNAME, u);
+        content_val.put(ACCT_COL_PASSWORD, p);
+        content_val.put(ACCT_COL_STATUS, status);
 
 
         db.insert(ACCT_TABLE_NAME, null, content_val);
@@ -106,8 +138,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updateNameStatus(int id, int status) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ACCT_COLUMN_STATUS, status);
-        db.update(ACCT_TABLE_NAME, contentValues, ACCT_COLUMN_USERID + "=" + id, null);
+        contentValues.put(ACCT_COL_STATUS, status);
+        db.update(ACCT_TABLE_NAME, contentValues, ACCT_COL_USERID + "=" + id, null);
         db.close();
         return true;
     }
@@ -117,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * */
     public Cursor getNames() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT * FROM " + ACCT_TABLE_NAME + " ORDER BY " + ACCT_COLUMN_USERID + " ASC;";
+        String sql = "SELECT * FROM " + ACCT_TABLE_NAME + " ORDER BY " + ACCT_COL_USERID + " ASC;";
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
@@ -128,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * */
     public Cursor getUnsyncedNames() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT * FROM " + ACCT_TABLE_NAME + " WHERE " + ACCT_COLUMN_STATUS + " = 0;";
+        String sql = "SELECT * FROM " + ACCT_TABLE_NAME + " WHERE " + ACCT_COL_STATUS + " = 0;";
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
