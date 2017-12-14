@@ -1,5 +1,6 @@
 package com.example.alysa.mobapde_scrapbook;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -15,16 +16,11 @@ import android.widget.Toast;
  * Created by Alysa on 12/3/2017.
  */
 
-public class Register_Module extends AppCompatActivity {
+public class Register_Module extends Activity {
 
-    public static final int NAME_SYNCED_WITH_SERVER = 1;
-    public static final int NAME_NOT_SYNCED_WITH_SERVER = 0;
-    public static final String DATA_SAVED_BROADCAST = "net.simplifiedcoding.datasaved";
-    private BroadcastReceiver broadcastReceiver;
-
-    public static final String URL_SAVE_NAME = "http://172.16.6.175/scraapbook/insertAccount.php";
     private DatabaseHelper db;
 
+    private static final String TAG = Register_Module.class.getSimpleName();
     Button btn_regToAccess, btn_Register;
     EditText rFName_input, rLName_input, rUsername_input, rPassword_Input;
 
@@ -70,28 +66,5 @@ public class Register_Module extends AppCompatActivity {
     }
 
 
-    private void addEntry(String fname, String lname, String Gen, String uname, String pass, String email)
-    {
 
-        SQLiteDatabase DB = db.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("firstname", fname);
-        values.put("lastname", lname);
-        values.put("gender", Gen);
-        values.put("username", uname);
-        values.put("password", pass);
-        values.put("email", email);
-
-        try
-        {
-            DB.insert(DatabaseHelper.ACCT_TABLE_NAME, null, values);
-
-            Toast.makeText(getApplicationContext(), "your details submitted Successfully...", Toast.LENGTH_SHORT).show();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 }
