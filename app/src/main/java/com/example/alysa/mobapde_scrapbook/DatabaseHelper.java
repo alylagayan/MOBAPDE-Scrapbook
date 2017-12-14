@@ -117,49 +117,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public List<User> getAllUser() {
-
-        String[] columns = {
-                ACCT_COL_USERID,
-                ACCT_COL_FIRST_NAME ,
-                ACCT_COL_USERNAME,
-                ACCT_COL_PASSWORD
-        };
+    public Cursor getAllUser() {
+        Cursor c;
+        String[] columns = { ACCT_COL_USERID, ACCT_COL_FIRST_NAME , ACCT_COL_USERNAME, ACCT_COL_PASSWORD};
 
         String sortOrder =  ACCT_COL_USERNAME + " ASC";
-        List<User> userList = new ArrayList<User>();
-
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(ACCT_TABLE_NAME,
-                columns,
-                null,
-                null,
-                null,
-                null,
-                sortOrder);
+        Cursor cursor = db.query(ACCT_TABLE_NAME, columns, null, null, null, null, sortOrder);
 
-        if (cursor.moveToFirst()) {
-            do {
-                User user = new User();
-                user.setID(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ACCT_COL_USERID))));
-                user.setUserName(cursor.getString(cursor.getColumnIndex(ACCT_COL_USERNAME)));
-                user.setPassword(cursor.getString(cursor.getColumnIndex(ACCT_COL_PASSWORD)));
-                // Adding user record to list
-                userList.add(user);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-
-        return userList;
+        return cursor;
     }
 
-    public Cursor getNames() {
+    public boolean checkUser(String u, String p) {
+
+        // array of columns to fetch
+        String[] columns = { ACCT_COL_USERID, ACCT_COL_FIRST_NAME, };
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT * FROM " + ACCT_TABLE_NAME + " ORDER BY " + ACCT_COL_STATUS + " ASC;";
-        Cursor c = db.rawQuery(sql, null);
-        return c;
+        // selection criteria
+        String selection = ACCT_COL_USERNAME + " = ?" + " AND " + ACCT_COL_PASSWORD + " = ?";
+
+        // selection arguments
+        String[] selectionArgs ={ u,p};
+
+        Cursor cursor = db.query(ACCT_TABLE_NAME, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                       //filter by row groups
+                null);                      //The sort order
+
+        int cursorCount = cursor.getCount();
+
+        cursor.close();
+        db.close();
+        if (cursorCount > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /*
