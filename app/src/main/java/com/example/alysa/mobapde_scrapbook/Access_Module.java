@@ -38,15 +38,6 @@ public class Access_Module extends AppCompatActivity {
     private DatabaseHelper db;
     private SessionManager session;
 
-    private List<User> accounts;
-
-    //public static final String URL_SAVE_NAME = "http://192.168.0.14/MOBAPDE-Scrapbook/php/saveName.php";
-    public static final int NAME_SYNCED_WITH_SERVER = 1;
-    public static final int NAME_NOT_SYNCED_WITH_SERVER = 0;
-    public static final String DATA_SAVED_BROADCAST = "net.alysa.data_saved";
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +97,6 @@ public class Access_Module extends AppCompatActivity {
         showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_LOGIN, new Response.Listener<String>() {
-
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response.toString());
@@ -125,12 +115,13 @@ public class Access_Module extends AppCompatActivity {
                         // Now store the user in SQLite
 
                         JSONObject user = jObj.getJSONObject("user");
-                        String u_name = user.getString("user_name");
-                        String first_name = user.getString("first_name");
-                        String last_name = user.getString("last_name");
+                        String username = user.getString("user_name");
+                        String firstname = user.getString("first_name");
+                        String lastname= user.getString("last_name");
+                        String password = user.getString("pass_word");
 
                         // Inserting row in users table
-                        db.addUser(first_name, last_name, u_name);
+                        db.addUser(firstname, lastname, username, password);
 
                         // Launch main activity
                         Intent intent = new Intent(Access_Module.this,
@@ -165,8 +156,8 @@ public class Access_Module extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("username", username);
-                params.put("password", password);
+                params.put("user_name", username);
+                params.put("last_name", password);
 
                 return params;
             }

@@ -50,6 +50,8 @@ class DB_functions{
         if ($stmt->execute()) {
             $user = $stmt->get_result()->fetch_assoc();
             $stmt->close();
+			
+			return $user;
  
         } else {
             return NULL;

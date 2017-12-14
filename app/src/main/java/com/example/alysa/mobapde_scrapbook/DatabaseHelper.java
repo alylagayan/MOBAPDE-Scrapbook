@@ -49,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 + ACCT_COL_FIRST_NAME + " TEXT, "
                                 + ACCT_COL_LAST_NAME + " TEXT, "
                                 + ACCT_COL_USERNAME + " TEXT,"
-                               // + ACCT_COL_PASSWORD + " TEXT,"
+                                + ACCT_COL_PASSWORD + " TEXT,"
                                 +");";
         String createPhoto = "CREATE TABLE "+ PHOTO_TABLE_NAME +"("
                              + PHOTO_COL_P_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -70,8 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-
-    public boolean addAccount(String f, String l, String u, String p) {
+    public boolean addUser(String f, String l, String u, String p) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content_val = new ContentValues();
 
@@ -79,20 +78,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         content_val.put(ACCT_COL_LAST_NAME, l);
         content_val.put(ACCT_COL_USERNAME, u);
         content_val.put(ACCT_COL_PASSWORD, p);
-
-        db.insert(ACCT_TABLE_NAME, null, content_val);
-        db.close();
-        return true;
-    }
-
-    public boolean addUser(String f, String l, String u) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content_val = new ContentValues();
-
-        content_val.put(ACCT_COL_FIRST_NAME , f);
-        content_val.put(ACCT_COL_LAST_NAME, l);
-        content_val.put(ACCT_COL_USERNAME, u);
-
 
         db.insert(ACCT_TABLE_NAME, null, content_val);
         db.close();

@@ -5,6 +5,6 @@ package com.example.alysa.mobapde_scrapbook;
  */
 
 public class AppConfig {
-    public static String URL_LOGIN = "http://192.168.0.14/MOBAPDE-Scrapbook/php/login.php";
-    public static String URL_REGISTER = "http://192.168.0.14/MOBAPDE-Scrapbook/php/register.php";
+    public static String URL_LOGIN = "http://172.16.2.107/MOBAPDE-Scrapbook/php/login.php";
+    public static String URL_REGISTER = "http://172.16.2.107/MOBAPDE-Scrapbook/php/register.php";
 }

@@ -15,20 +15,21 @@ if (isset($_POST['f_name']) && isset($_POST['l_name']) && isset($_POST['u_name']
     $password = $_POST['password'];
  
     // check if user is already existed with the same email
-    if ($db->isUserExisted($email)) {
+    if ($db->isUserExisted($u_name)) {
         // user already existed
         $response["error"] = TRUE;
-        $response["error_msg"] = "User already existed with " . $email;
+        $response["error_msg"] = "User already existed with " . $u_name;
         echo json_encode($response);
     } else {
         // create a new user
-        $user = $db->storeUser($name, $email, $password);
+        $user = $db->storeUser($fname,$lname,$email, $password);
         if ($user) {
             // user stored successfully
             $response["error"] = FALSE;
-            $response["user"]["first_name"] = $user["name"];
-			$response["user"]["last_name"] = $user["name"];
-            $response["user"]["last_name"] = $user["email"];
+            $response["user"]["user_name"] = $user["user_name"];
+			$response["user"]["first_name"] = $user["first_name"];
+            $response["user"]["last_name"] = $user["last_name"];
+			$response["user"]["pass_word"] = $user["pass_code"];
 
             echo json_encode($response);
         } else {
