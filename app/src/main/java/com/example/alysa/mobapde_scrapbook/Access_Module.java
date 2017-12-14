@@ -83,7 +83,7 @@ public class Access_Module extends AppCompatActivity {
     }
 
     private void launchApp() {
-        Intent intent = new Intent(this, App_Module.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

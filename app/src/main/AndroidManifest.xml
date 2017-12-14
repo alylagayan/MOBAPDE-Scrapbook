@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.alysa.mobapde_scrapbook">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -18,10 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".App_Module"
-                  android:parentActivityName=".Access_Module"></activity>
-        <activity android:name=".Register_Module"
-            android:parentActivityName=".Access_Module"></activity>
+        <activity
+            android:name=".App_Module"
+            android:parentActivityName=".Access_Module" />
+        <activity
+            android:name=".Register_Module"
+            android:parentActivityName=".Access_Module" />
+        <activity android:name=".GridActivity" />
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
