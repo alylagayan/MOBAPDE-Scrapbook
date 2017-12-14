@@ -11,19 +11,21 @@ public class User {
     private String user_n; //username
     private String pass_w; //password
     private int status; // status
-
-    public User(String fn, String ln, String un, String pw, int s){
-        this.first_n = fn;
-        this.last_n = ln;
-        this.user_n = un;
-        this.pass_w = pw;
-        this.status = s;
-    }
+    private int id; //id
 
     public String getFirstName(){ return first_n; }
     public String getLastName(){ return last_n; }
     public String getUserName(){ return user_n;}
     public String getPassword(){ return pass_w;}
     public int getStatus(){ return status; }
+    public int getID(){ return id; }
+
+    public void setFirstName(String i){ this.first_n = i; }
+    public void setLastName(String i){ this.last_n = i; }
+    public void setUserName(String i){ this.user_n = i;}
+    public void setPassword(String i){ this.pass_w = i;}
+    public void setStatus(int i){ this.status = i; }
+    public void setID(int i){ this.id = i; }
+
 
 }

@@ -7,7 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.alysa.mobapde_scrapbook.models.User;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Alysa on 12/3/2017.
@@ -17,15 +21,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "mobapde_db";
 
-    // Table `users`
-    /*  id INT AUTO_INCREMENT NOT NULL,
-        user_name VARCHAR(30) NOT NULL,
-        first_name VARCHAR(30) NOT NULL,
-        last_name VARCHAR(30) NOT NULL,
-        pass_code VARCHAR(30) NOT NULL,
-
-        PRIMARY KEY (id)
-    * */
     public static final String ACCT_TABLE_NAME = "users";
     public static final String ACCT_COL_USERID = "id";
     public static final String ACCT_COL_FIRST_NAME = "first_name";
@@ -34,19 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ACCT_COL_PASSWORD = "pass_code";
     public static final String ACCT_COL_STATUS = "status";
 
-
-    //Table `photo`
-    /*  photo_id INT NOT NULL,
-        user_id  INT NOT NULL,
-        url TEXT NOT NULL,
-        caption TEXT NOT NULL,
-        date_of_upload DATETIME NOT NULL,
-
-        PRIMARY KEY (photo_id),
-        CONSTRAINT user_id
-            FOREIGN KEY (user_id)
-            REFERENCES mobapde_db.users (id)
-    * */
     public static final String PHOTO_TABLE_NAME = "photo";
     public static final String PHOTO_COL_P_ID = "photo_id";
     public static final String PHOTO_COL_U_ID = "user_id";
@@ -88,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean insertAccount(String f, String l, String u, String p){
+    public boolean addAccount(String f, String l, String u, String p){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content_val= new ContentValues();
 
@@ -100,18 +82,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(ACCT_TABLE_NAME, null, content_val);
 
         if(result == -1){
+            db.close();
             return false;
-        }else
+        }else{
+            db.close();
             return true;
+        }
+
     }
 
-    /*
-    * This method is taking two arguments
-    * first one is the name that is to be saved
-    * second one is the status
-    * 0 means the name is synced with the server
-    * 1 means the name is not synced with the server
-    **/
+
     public boolean addAccount(String f, String l, String u, String p, int status) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content_val = new ContentValues();
@@ -128,13 +108,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-
-    /*
-    * This method taking two arguments
-    * first one is the id of the name for which
-    * we have to update the sync status
-    * and the second one is the status that will be changed
-    * */
     public boolean updateNameStatus(int id, int status) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -144,12 +117,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    /*
-    * this method will give us all the name stored in sqlite
-    * */
+    public List<User> getAllUser() {
+
+        String[] columns = {
+                ACCT_COL_USERID,
+                ACCT_COL_FIRST_NAME ,
+                ACCT_COL_USERNAME,
+                ACCT_COL_PASSWORD
+        };
+
+        String sortOrder =  ACCT_COL_USERNAME + " ASC";
+        List<User> userList = new ArrayList<User>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(ACCT_TABLE_NAME,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                sortOrder);
+
+        if (cursor.moveToFirst()) {
+            do {
+                User user = new User();
+                user.setID(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ACCT_COL_USERID))));
+                user.setUserName(cursor.getString(cursor.getColumnIndex(ACCT_COL_USERNAME)));
+                user.setPassword(cursor.getString(cursor.getColumnIndex(ACCT_COL_PASSWORD)));
+                // Adding user record to list
+                userList.add(user);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return userList;
+    }
+
     public Cursor getNames() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT * FROM " + ACCT_TABLE_NAME + " ORDER BY " + ACCT_COL_USERID + " ASC;";
+        String sql = "SELECT * FROM " + ACCT_TABLE_NAME + " ORDER BY " + ACCT_COL_STATUS + " ASC;";
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
