@@ -157,7 +157,7 @@ public class Register_Module extends Activity {
                 params.put("user_name", username);
                 params.put("first_name", fname);
                 params.put("last_name",  lname);
-                params.put("last_name", password);
+                params.put("pass_word", password);
 
                 return params;
             }

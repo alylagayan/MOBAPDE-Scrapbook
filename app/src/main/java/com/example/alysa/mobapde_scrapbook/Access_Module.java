@@ -116,10 +116,10 @@ public class Access_Module extends AppCompatActivity {
                         // Now store the user in SQLite
 
                         JSONObject user = jObj.getJSONObject("user");
-                        String username = user.getString("user_name");
+                        String username = user.getString("username");
                         String firstname = user.getString("first_name");
                         String lastname= user.getString("last_name");
-                        String password = user.getString("pass_word");
+                        String password = user.getString("password");
 
                         // Inserting row in users table
                         db.addUser(firstname, lastname, username, password);
@@ -158,8 +158,8 @@ public class Access_Module extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("user_name", username);
-                params.put("last_name", password);
+                params.put("username", username);
+                params.put("password", password);
 
                 return params;
             }

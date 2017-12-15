@@ -49,18 +49,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 + ACCT_COL_FIRST_NAME + " TEXT, "
                                 + ACCT_COL_LAST_NAME + " TEXT, "
                                 + ACCT_COL_USERNAME + " TEXT,"
-                                + ACCT_COL_PASSWORD + " TEXT,"
+                                + ACCT_COL_PASSWORD + " TEXT"
                                 +");";
-        String createPhoto = "CREATE TABLE "+ PHOTO_TABLE_NAME +"("
-                             + PHOTO_COL_P_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
-                             + PHOTO_COL_U_ID +" INTEGER, "
-                             + PHOTO_COL_DATA +" TEXT, "
-                             + PHOTO_COL_DATE +" TEXT, "
-                             + PHOTO_COL_STATUS +"  TINYINT"
-                             +"FOREIGN KEY(" + PHOTO_COL_U_ID + ") REFERENCES "+ ACCT_TABLE_NAME + "(id) " +");";
+    //    String createPhoto = "CREATE TABLE "+ PHOTO_TABLE_NAME +"("
+    //                         + PHOTO_COL_P_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+    //                         + PHOTO_COL_U_ID +" INTEGER, "
+    //                         + PHOTO_COL_DATA +" TEXT, "
+    //                         + PHOTO_COL_DATE +" TEXT, "
+    //                         + PHOTO_COL_STATUS +"  TINYINT"
+    //                         +"FOREIGN KEY(" + PHOTO_COL_U_ID + ") REFERENCES "+ ACCT_TABLE_NAME + "(id) " +");";
 
         sqLiteDatabase.execSQL(createAccount);
-        sqLiteDatabase.execSQL(createPhoto);
+//        sqLiteDatabase.execSQL(createPhoto);
     }
 
     @Override

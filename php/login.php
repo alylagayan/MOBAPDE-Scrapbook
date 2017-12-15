@@ -1,5 +1,5 @@
 <?php
-require_once 'include/DB_Functions.php';
+require_once 'db_function.php';
 $db = new DB_Functions();
  
 // json response array
@@ -12,12 +12,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $password = $_POST['password'];
  
     // get the user by email and password
-    $user = $db->getUserByEmailAndPassword($username, $password);
+    $user = $db->getUserByUsernameAndPassword($username, $password);
  
     if ($user != false) {
         // use is found
         $response["error"] = FALSE;
-		$response["user"]["user_name"] = $user["user_name"];
+		$response["user"]["username"] = $user["user_name"];
         $response["user"]["first_name"] = $user["first_name"];
 		$response["user"]["last_name"] = $user["last_name"];
 		$response["user"]["password"] = $user["pass_code"];
