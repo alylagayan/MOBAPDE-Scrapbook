@@ -36,7 +36,7 @@ public class SessionManager {
 
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
 
-        // commit changes
+
         editor.commit();
 
         Log.d(TAG, "User login session modified!");
