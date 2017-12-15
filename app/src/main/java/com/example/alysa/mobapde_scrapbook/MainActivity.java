@@ -18,13 +18,8 @@ public class MainActivity extends AppCompatActivity {
     GridView androidGridView;
     Integer[] imageIDs = {
             R.drawable.email, R.drawable.mobile, R.drawable.alram,
-            R.drawable.android, R.drawable.wordpress, R.drawable.web,
-            R.drawable.email, R.drawable.mobile, R.drawable.alram,
-            R.drawable.android, R.drawable.wordpress, R.drawable.web,
-            R.drawable.email, R.drawable.mobile, R.drawable.alram,
-            R.drawable.android, R.drawable.wordpress, R.drawable.web,
-            R.drawable.email, R.drawable.mobile, R.drawable.alram,
-            R.drawable.android, R.drawable.wordpress, R.drawable.web,
+            R.drawable.rigel, R.drawable.recycle, R.drawable.media,
+
 
     };
     protected void onCreate(Bundle savedInstanceState) {

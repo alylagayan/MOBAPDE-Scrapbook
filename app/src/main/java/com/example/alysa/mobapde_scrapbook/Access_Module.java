@@ -126,7 +126,7 @@ public class Access_Module extends AppCompatActivity {
 
                         // Launch main activity
                         Intent intent = new Intent(Access_Module.this,
-                                App_Module.class);
+                                MainActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
