@@ -19,6 +19,8 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
+
     public static final String DB_NAME = "mobapde_db";
 
     public static final String ACCT_TABLE_NAME = "users";
@@ -27,7 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ACCT_COL_LAST_NAME = "last_name";
     public static final String ACCT_COL_USERNAME = "user_name";
     public static final String ACCT_COL_PASSWORD = "pass_code";
-    public static final String ACCT_COL_STATUS = "status";
 
     public static final String PHOTO_TABLE_NAME = "photo";
     public static final String PHOTO_COL_P_ID = "photo_id";
@@ -49,7 +50,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 + ACCT_COL_LAST_NAME + " TEXT, "
                                 + ACCT_COL_USERNAME + " TEXT,"
                                 + ACCT_COL_PASSWORD + " TEXT,"
-                                + ACCT_COL_STATUS + " TINYINT"
                                 +");";
         String createPhoto = "CREATE TABLE "+ PHOTO_TABLE_NAME +"("
                              + PHOTO_COL_P_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -70,29 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean addAccount(String f, String l, String u, String p){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content_val= new ContentValues();
-
-        content_val.put(ACCT_COL_FIRST_NAME , f);
-        content_val.put(ACCT_COL_LAST_NAME, l);
-        content_val.put(ACCT_COL_USERNAME, u);
-        content_val.put(ACCT_COL_PASSWORD, p);
-
-        long result = db.insert(ACCT_TABLE_NAME, null, content_val);
-
-        if(result == -1){
-            db.close();
-            return false;
-        }else{
-            db.close();
-            return true;
-        }
-
-    }
-
-
-    public boolean addAccount(String f, String l, String u, String p, int status) {
+    public boolean addUser(String f, String l, String u, String p) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content_val = new ContentValues();
 
@@ -100,25 +78,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         content_val.put(ACCT_COL_LAST_NAME, l);
         content_val.put(ACCT_COL_USERNAME, u);
         content_val.put(ACCT_COL_PASSWORD, p);
-        content_val.put(ACCT_COL_STATUS, status);
-
 
         db.insert(ACCT_TABLE_NAME, null, content_val);
         db.close();
         return true;
     }
 
-    public boolean updateNameStatus(int id, int status) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ACCT_COL_STATUS, status);
-        db.update(ACCT_TABLE_NAME, contentValues, ACCT_COL_USERID + "=" + id, null);
-        db.close();
-        return true;
-    }
 
     public Cursor getAllUser() {
-        Cursor c;
+
         String[] columns = { ACCT_COL_USERID, ACCT_COL_FIRST_NAME , ACCT_COL_USERNAME, ACCT_COL_PASSWORD};
 
         String sortOrder =  ACCT_COL_USERNAME + " ASC";
@@ -129,45 +97,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public boolean checkUser(String u, String p) {
-
-        // array of columns to fetch
-        String[] columns = { ACCT_COL_USERID, ACCT_COL_FIRST_NAME, };
-        SQLiteDatabase db = this.getReadableDatabase();
-        // selection criteria
-        String selection = ACCT_COL_USERNAME + " = ?" + " AND " + ACCT_COL_PASSWORD + " = ?";
-
-        // selection arguments
-        String[] selectionArgs ={ u,p};
-
-        Cursor cursor = db.query(ACCT_TABLE_NAME, //Table to query
-                columns,                    //columns to return
-                selection,                  //columns for the WHERE clause
-                selectionArgs,              //The values for the WHERE clause
-                null,                       //group the rows
-                null,                       //filter by row groups
-                null);                      //The sort order
-
-        int cursorCount = cursor.getCount();
-
-        cursor.close();
+    public void deleteUsers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Delete All Rows
+        db.delete(ACCT_TABLE_NAME, null, null);
         db.close();
-        if (cursorCount > 0) {
-            return true;
-        }
 
-        return false;
+        Log.d(TAG, "Deleted all user info from sqlite");
     }
 
-    /*
-    * this method is for getting all the unsynced name
-    * so that we can sync it with database
-    * */
-    public Cursor getUnsyncedNames() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT * FROM " + ACCT_TABLE_NAME + " WHERE " + ACCT_COL_STATUS + " = 0;";
-        Cursor c = db.rawQuery(sql, null);
-        return c;
-    }
 
 }
