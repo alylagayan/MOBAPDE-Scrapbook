@@ -96,7 +96,7 @@ public class Access_Module extends AppCompatActivity {
         pDialog.setMessage("Logging in ...");
         showDialog();
 
-=======
+
         StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_LOGIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
